@@ -17,10 +17,10 @@ fn main() {
     let input_file = matches.value_of("input file").unwrap();
     let output_file = matches.value_of("output file").unwrap();
 
-    let image = image::open("input.png").unwrap();
+    let image = image::open(input_file).unwrap();
     let (width, height) = image.dimensions();
 
-    let mut possible_pixel_sizes = (1..=min(width, height))
+    let possible_pixel_sizes = (1..=min(width, height))
         .filter(|pixel_size| is_pixel_size_possible(*pixel_size, width, height));
 
     let image_buffer = possible_pixel_sizes
@@ -30,7 +30,7 @@ fn main() {
         .next()
         .unwrap();
 
-    image_buffer.save(output_file);
+    image_buffer.save(output_file).unwrap();
 }
 
 fn is_pixel_size_possible(pixel_size: u32, width: u32, height: u32) -> bool {
