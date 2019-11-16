@@ -14,7 +14,7 @@ fn main() {
         .arg(Arg::with_name("input file").required(true))
         .arg(Arg::with_name("output file").required(true))
         .arg(
-            Arg::with_name("pixel size")
+            Arg::with_name("force pixel size")
                 .long("--pixel-size")
                 .takes_value(true),
         );
@@ -24,7 +24,7 @@ fn main() {
     let input_file = matches.value_of("input file").unwrap();
     let output_file = matches.value_of("output file").unwrap();
     let pixel_size = matches
-        .value_of("pixel size")
+        .value_of("force pixel size")
         .map(|pixel_size| u32::from_str(pixel_size).expect("pixel size must be a number"));
 
     let image = image::open(input_file).unwrap();
