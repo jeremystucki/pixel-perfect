@@ -6,6 +6,8 @@ use image::{DynamicImage, GenericImageView, ImageBuffer, Pixel, Rgba};
 use std::cmp::min;
 use std::str::FromStr;
 
+type RgbaImageBuffer = ImageBuffer<Rgba<u8>, Vec<<Rgba<u8> as Pixel>::Subpixel>>;
+
 fn main() {
     let app = App::new(crate_name!())
         .version(crate_version!())
@@ -68,10 +70,10 @@ fn get_average_pixel_value(
             let pixel = image.get_pixel(original_x + offset_x, original_y + offset_y);
             let rgba = pixel.0;
 
-            red += rgba[0] as u32;
-            green += rgba[1] as u32;
-            blue += rgba[2] as u32;
-            alpha += rgba[3] as u32;
+            red += u32::from(rgba[0]);
+            green += u32::from(rgba[1]);
+            blue += u32::from(rgba[2]);
+            alpha += u32::from(rgba[3]);
         }
     }
 
@@ -84,10 +86,7 @@ fn get_average_pixel_value(
     Rgba([red as u8, green as u8, blue as u8, alpha as u8])
 }
 
-fn force_export(
-    image: &DynamicImage,
-    pixel_size: u32,
-) -> ImageBuffer<Rgba<u8>, Vec<<Rgba<u8> as Pixel>::Subpixel>> {
+fn force_export(image: &DynamicImage, pixel_size: u32) -> RgbaImageBuffer {
     let (original_width, original_height) = image.dimensions();
 
     let width = original_width / pixel_size;
@@ -128,10 +127,7 @@ fn get_pixel_value(
     Ok(values[0])
 }
 
-fn try_export(
-    image: &DynamicImage,
-    pixel_size: u32,
-) -> Result<ImageBuffer<Rgba<u8>, Vec<<Rgba<u8> as Pixel>::Subpixel>>, ()> {
+fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<RgbaImageBuffer, ()> {
     let (original_width, original_height) = image.dimensions();
 
     let width = original_width / pixel_size;
