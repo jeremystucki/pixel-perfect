@@ -1,21 +1,36 @@
-use image::{DynamicImage, GenericImageView, ImageBuffer, Rgba};
+#[macro_use]
+extern crate clap;
+
+use clap::{App, Arg};
+use image::{DynamicImage, GenericImageView, ImageBuffer, Pixel, Rgba};
 use std::cmp::min;
 
 fn main() {
+    let app = App::new(crate_name!())
+        .version(crate_version!())
+        .about(crate_description!())
+        .author(crate_authors!())
+        .arg(Arg::with_name("input file").required(true))
+        .arg(Arg::with_name("output file").required(true));
+
+    let matches = app.get_matches();
+    let input_file = matches.value_of("input file").unwrap();
+    let output_file = matches.value_of("output file").unwrap();
+
     let image = image::open("input.png").unwrap();
     let (width, height) = image.dimensions();
 
-    let mut possible_pixel_sizes: Vec<_> = (1..=min(width, height))
-        .filter(|pixel_size| is_pixel_size_possible(*pixel_size, width, height))
-        .collect();
+    let mut possible_pixel_sizes = (1..=min(width, height))
+        .filter(|pixel_size| is_pixel_size_possible(*pixel_size, width, height));
 
-    possible_pixel_sizes.reverse();
+    let image_buffer = possible_pixel_sizes
+        .rev()
+        .map(|pixel_size| try_export(&image, pixel_size))
+        .filter_map(Result::ok)
+        .next()
+        .unwrap();
 
-    for pixel_size in possible_pixel_sizes {
-        if try_export(&image, pixel_size).is_ok() {
-            break;
-        }
-    }
+    image_buffer.save(output_file);
 }
 
 fn is_pixel_size_possible(pixel_size: u32, width: u32, height: u32) -> bool {
@@ -45,7 +60,10 @@ fn get_pixel_value(
     Ok(values[0])
 }
 
-fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<(), ()> {
+fn try_export(
+    image: &DynamicImage,
+    pixel_size: u32,
+) -> Result<ImageBuffer<Rgba<u8>, Vec<<Rgba<u8> as Pixel>::Subpixel>>, ()> {
     let (original_width, original_height) = image.dimensions();
 
     let width = original_width / pixel_size;
@@ -62,7 +80,5 @@ fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<(), ()> {
         }
     }
 
-    image_buffer.save("output.png").unwrap();
-
-    Ok(())
+    Ok(image_buffer)
 }
