@@ -12,7 +12,7 @@ fn main() {
     possible_pixel_sizes.reverse();
 
     for pixel_size in possible_pixel_sizes {
-        if let Ok(_) = try_export(&image, pixel_size) {
+        if try_export(&image, pixel_size).is_ok() {
             break;
         }
     }
