@@ -21,3 +21,5 @@ jobs:
       - uses: crazy-max/ghaction-github-pages@v1.2.4
         with:
           build_dir: wasm/public/dist
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
