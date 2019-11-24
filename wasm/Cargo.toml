@@ -1,0 +1,12 @@
+[package]
+name = "pixel-perfect-wasm"
+description = "Resize pixelated images to their exact size"
+version = "1.0.0"
+authors = ["Jeremy Stucki <jeremy@myelin.ch>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
