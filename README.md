@@ -12,7 +12,7 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-        --pixel-size <force pixel size>    
+        --force-pixel-size <pixel size>    
 
 ARGS:
     <input file>     
