@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "serve": "webpack-dev-server"
+    "serve": "webpack-dev-server",
+    "build": "webpack"
   },
   "dependencies": {
     "pixel-perfect": "file:../pkg"

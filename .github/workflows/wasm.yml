@@ -1,0 +1,23 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: 'Deploy'
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
+      - name: Build
+        run: cargo build --all-features
+      - name: Build wasm
+        run: (cd wasm && wasm-pack build)
+      - name: npm build
+        run: (cd wasm/public && npm run-script build)
+      - name: Copy index.html
+        run: cp wasm/public/index.html wasm/public/dist
+      - uses: crazy-max/ghaction-github-pages@v1.2.4
+        with:
+          build_dir: wasm/public/dist
