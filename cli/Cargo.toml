@@ -1,0 +1,11 @@
+[package]
+name = "pixel-perfect"
+description = "Resize pixelated images to their exact size"
+version = "1.0.0"
+authors = ["Jeremy Stucki <jeremy@myelin.ch>"]
+edition = "2018"
+
+[dependencies]
+pixel-perfect-core = { path = "../core" }
+image = "0.22"
+clap = "2.33"
