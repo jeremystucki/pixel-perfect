@@ -285,6 +285,8 @@ dependencies = [
 name = "pixel-perfect-wasm"
 version = "1.0.0"
 dependencies = [
+ "image 0.22.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pixel-perfect-core 1.0.0",
  "wasm-bindgen 0.2.55 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

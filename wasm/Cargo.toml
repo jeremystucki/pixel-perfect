@@ -9,4 +9,6 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
+pixel-perfect-core = { path = "../core" }
 wasm-bindgen = "0.2"
+image = "0.22"
