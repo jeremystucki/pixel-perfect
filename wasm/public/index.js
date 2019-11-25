@@ -4,9 +4,13 @@ js.then(js => {
     document.getElementById("button").onclick = function() {
         let reader = new FileReader();
         reader.onload = function() {
-            let output = js.handle_input(new Uint8Array(this.result));
+            let pixelSize = document.getElementById("pixel-size").valueAsNumber;
+
+            let uint8Array = new Uint8Array(this.result);
+            let output = pixelSize.isNaN ? js.export_normally(uint8Array) : js.force_export(uint8Array, pixelSize);
+
             let a = window.document.createElement("a");
-            a.href = window.URL.createObjectURL(new Blob([output], { type: 'image/png' }));
+            a.href = window.URL.createObjectURL(new Blob([output], { type: "image/png" }));
             a.download = "image.png";
 
             document.body.appendChild(a);
