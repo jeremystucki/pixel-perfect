@@ -1,6 +1,5 @@
-use image::{DynamicImage, GenericImageView, ImageBuffer, Pixel, Rgba};
-
-type RgbaImageBuffer = ImageBuffer<Rgba<u8>, Vec<<Rgba<u8> as Pixel>::Subpixel>>;
+use image::{DynamicImage, GenericImageView, ImageBuffer, Rgba, RgbaImage};
+use std::cmp::min;
 
 fn get_average_pixel_value(
     image: &DynamicImage,
@@ -34,7 +33,7 @@ fn get_average_pixel_value(
     Rgba([red as u8, green as u8, blue as u8, alpha as u8])
 }
 
-pub fn force_export(image: &DynamicImage, pixel_size: u32) -> RgbaImageBuffer {
+pub fn force_export(image: &DynamicImage, pixel_size: u32) -> RgbaImage {
     let (original_width, original_height) = image.dimensions();
 
     let width = original_width / pixel_size;
@@ -75,7 +74,7 @@ fn get_pixel_value(
     Ok(values[0])
 }
 
-pub fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<RgbaImageBuffer, ()> {
+fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<RgbaImage, ()> {
     let (original_width, original_height) = image.dimensions();
 
     let width = original_width / pixel_size;
@@ -93,4 +92,22 @@ pub fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<RgbaImageBuff
     }
 
     Ok(image_buffer)
+}
+
+pub fn export(image: &DynamicImage) -> RgbaImage {
+    let (width, height) = image.dimensions();
+
+    let possible_pixel_sizes = (1..=min(width, height))
+        .filter(|pixel_size| is_pixel_size_possible(*pixel_size, width, height));
+
+    possible_pixel_sizes
+        .rev()
+        .map(|pixel_size| try_export(&image, pixel_size))
+        .filter_map(Result::ok)
+        .next()
+        .unwrap()
+}
+
+fn is_pixel_size_possible(pixel_size: u32, width: u32, height: u32) -> bool {
+    (width % pixel_size == 0) && (height % pixel_size == 0)
 }
