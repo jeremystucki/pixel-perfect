@@ -11,13 +11,13 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
-        run: cargo build --all-features
-      - name: Build wasm
+        run: (cd wasm && cargo build --all-features)
+      - name: wasm-pack
         run: (cd wasm && wasm-pack build)
       - name: npm build
         run: (cd wasm/public && npm install && npm run-script build)
-      - name: Copy index.html
-        run: cp wasm/public/index.html wasm/public/dist
+      - name: Move index.html
+        run: mv wasm/public/index.html wasm/public/dist
       - uses: crazy-max/ghaction-github-pages@v1.2.4
         with:
           build_dir: wasm/public/dist
