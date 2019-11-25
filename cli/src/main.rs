@@ -2,9 +2,7 @@
 extern crate clap;
 
 use clap::{App, Arg};
-use image::GenericImageView;
 use pixel_perfect_core::{export, force_export};
-use std::cmp::min;
 use std::str::FromStr;
 
 fn main() {
