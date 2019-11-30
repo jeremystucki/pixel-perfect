@@ -9,6 +9,26 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-pixel-perfect-core = { path = "../core" }
 wasm-bindgen = "0.2"
-image = "0.22"
+
+[dependencies.pixel-perfect-core]
+path = "../core"
+default-features = false
+
+# Exclude 'jpeg_rayon'
+[dependencies.image]
+version = "0.22"
+default-features = false
+features = [
+    "gif_codec",
+    "jpeg",
+    "ico",
+    "png_codec",
+    "pnm",
+    "tga",
+    "tiff",
+    "webp",
+    "bmp",
+    "hdr",
+    "dxt"
+]

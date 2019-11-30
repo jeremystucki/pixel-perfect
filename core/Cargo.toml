@@ -5,5 +5,24 @@ version = "1.0.0"
 authors = ["Jeremy Stucki <jeremy@myelin.ch>"]
 edition = "2018"
 
-[dependencies]
-image = "0.22"
+# Exclude 'jpeg_rayon'
+[dependencies.image]
+version = "0.22"
+default-features = false
+features = [
+    "gif_codec",
+    "jpeg",
+    "ico",
+    "png_codec",
+    "pnm",
+    "tga",
+    "tiff",
+    "webp",
+    "bmp",
+    "hdr",
+    "dxt"
+]
+
+[features]
+default = ["jpeg_rayon"]
+jpeg_rayon = ["image/jpeg_rayon"]
