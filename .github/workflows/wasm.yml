@@ -13,8 +13,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install wasm-pack
         run: cargo install wasm-pack
-      - name: Build
-        run: (cd wasm && cargo build --all-features)
       - name: wasm-pack
         run: (cd wasm && wasm-pack build)
       - name: npm build
