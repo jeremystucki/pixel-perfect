@@ -44,7 +44,7 @@ pub fn force_export(image: &DynamicImage, pixel_size: u32) -> RgbaImage {
     for (original_x, x) in (0..width).map(|x| (x * pixel_size, x)) {
         for (original_y, y) in (0..height).map(|y| (y * pixel_size, y)) {
             let pixel = image_buffer.get_pixel_mut(x, y);
-            *pixel = get_average_pixel_value(&image, pixel_size, original_x, original_y);
+            *pixel = get_average_pixel_value(image, pixel_size, original_x, original_y);
         }
     }
 
@@ -84,7 +84,7 @@ fn try_export(image: &DynamicImage, pixel_size: u32) -> Result<RgbaImage, ()> {
 
     for (original_x, x) in (0..width).map(|x| (x * pixel_size, x)) {
         for (original_y, y) in (0..height).map(|y| (y * pixel_size, y)) {
-            get_pixel_value(&image, pixel_size, original_x, original_y).map(|pixel_value| {
+            get_pixel_value(image, pixel_size, original_x, original_y).map(|pixel_value| {
                 let pixel = image_buffer.get_pixel_mut(x, y);
                 *pixel = pixel_value;
             })?
@@ -102,7 +102,7 @@ pub fn export(image: &DynamicImage) -> RgbaImage {
 
     possible_pixel_sizes
         .rev()
-        .map(|pixel_size| try_export(&image, pixel_size))
+        .map(|pixel_size| try_export(image, pixel_size))
         .filter_map(Result::ok)
         .next()
         .unwrap()
